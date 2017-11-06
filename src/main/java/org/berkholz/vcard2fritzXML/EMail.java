@@ -15,7 +15,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 package org.berkholz.vcard2fritzXML;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -27,9 +26,9 @@ import org.apache.commons.validator.routines.EmailValidator;
 
 /**
  * Mail address of the contact.
- * 
+ *
  * @author Marcel Berkholz
- * 
+ *
  */
 
 /*
@@ -39,6 +38,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "email")
 public class EMail {
+
 	@XmlAttribute
 	private final Integer id;
 
@@ -60,16 +60,13 @@ public class EMail {
 
 	/**
 	 * Instantiate an email address with the given email address(constructor).
-	 * 
+	 *
 	 * @param email Mail address to instantiate with.
 	 */
 	public EMail(String email) {
 		this.email = new String();
 
-		// validate the mail address before creating an object
-		if (EMail.validateEmail(email)) {
-			this.setEmail(email);
-		}
+		this.setEmail(email);
 
 		this.classifier = "private";
 		// there is only one mail address possible
@@ -78,16 +75,16 @@ public class EMail {
 
 	/**
 	 * Checks if a mail address is set.
-	 * 
+	 *
 	 * @return Returns true if no mail address is given otherwise false.
 	 */
 	public boolean isEmpty() {
-        return this.email.isEmpty();
+		return this.email.isEmpty();
 	}
 
 	/**
 	 * Get the mail address.
-	 * 
+	 *
 	 * @return The mail address as String.
 	 */
 	public String getEmail() {
@@ -96,19 +93,34 @@ public class EMail {
 
 	/**
 	 * Set the mail address.
-	 * 
+	 *
 	 * @param email Mail address as String representation.
 	 */
 	public void setEmail(String email) {
-		if (EMail.validateEmail(email))
-			this.email = email;
-		else
-			System.out.println("Mail address \'" + email + "\' is not valid.");
+		// we validate against the trimmed mail address
+		String trimmedEmailAddress = EMail.trim(email);
+		if (EMail.validateEmail(trimmedEmailAddress)) {
+			this.email = trimmedEmailAddress;
+		} else {
+			System.out.println("Mail address \'" + email + "\' (trimmed: " + trimmedEmailAddress + ") is not valid.");
+		}
+	}
+
+	/**
+	 * Helperfunction to trim not allowed characters in the email address.
+	 *
+	 * @param email Mail address as String representation with white spaces,
+	 * tabulators etc.
+	 * @return Mail address with no white spaces and tabulators at the beginning
+	 * and at the end.
+	 */
+	public static String trim(String email) {
+		return email.trim().replace("\t", "");
 	}
 
 	/**
 	 * Validate a mail address.
-	 * 
+	 *
 	 * @param email Mail address as String representation.
 	 * @return True if mail address is valid, otherwise false.
 	 */
