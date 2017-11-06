@@ -15,7 +15,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 package org.berkholz.vcard2fritzXML.test;
 
 import static org.junit.Assert.assertEquals;
@@ -27,11 +26,12 @@ import org.junit.Test;
 
 /**
  * Test class for EMail.
- * 
+ *
  * @author Marcel Berkholz
- * 
+ *
  */
 public class EMailTest {
+
 	EMail mail;
 
 	@Before
@@ -83,5 +83,10 @@ public class EMailTest {
 	@Test
 	public void testInvalidMail_umlauts() {
 		assertFalse("Umlauts are not allowed in local-part.", EMail.validateEmail("ää@example.de"));
+	}
+
+	@Test
+	public void testInvalidMail_containing_whitespaces() {
+		assertFalse("Containing whitespaces are not allowed in mail addresses.", EMail.validateEmail("a .b @example.de"));
 	}
 }
